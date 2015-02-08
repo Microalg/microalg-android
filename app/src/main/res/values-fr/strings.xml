@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MicroAlg</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="main_instructions">Sélectionnez le texte ci-dessous (avec un clic long ou un double-clic), puis partagez-le vers MicroAlg :</string>
+    <string name="last_instructions">De même, vous pouvez partager du code depuis un éditeur de texte ou une autre application.</string>
+
+</resources>
