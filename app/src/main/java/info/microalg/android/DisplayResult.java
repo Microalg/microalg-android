@@ -1,9 +1,12 @@
 package info.microalg.android;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.widget.Toast;
 
 
 public class DisplayResult extends ActionBarActivity {
@@ -12,6 +15,26 @@ public class DisplayResult extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_result);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (sharedText != null) {
+                String html_src = "<html><head><meta charset=\"utf-8\"></head><body>";
+                html_src += "-- " + sharedText + " --";
+                html_src += "</body></html>";
+                WebView webview = (WebView) findViewById(R.id.webViewResult);
+                webview.loadData(html_src, "text/html", "utf-8");
+            } else {
+                String message = getString(R.string.incompatible_data);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            String message = getString(R.string.incompatible_action);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
 

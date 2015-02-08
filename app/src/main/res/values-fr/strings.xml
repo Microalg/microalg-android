@@ -5,5 +5,8 @@
     <string name="action_settings">Paramètres</string>
     <string name="main_instructions">Sélectionnez le texte ci-dessous (avec un clic long ou un double-clic), puis partagez-le vers MicroAlg :</string>
     <string name="last_instructions">De même, vous pouvez partager du code depuis un éditeur de texte ou une autre application.</string>
+    <string name="title_activity_display_result">MicroAlg</string>
+    <string name="incompatible_action">Impossible de traiter cette action.</string>
+    <string name="incompatible_data">Impossible de traiter ces informations.</string>
 
 </resources>
