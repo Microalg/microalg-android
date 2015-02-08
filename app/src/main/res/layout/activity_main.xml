@@ -39,7 +39,7 @@
 
             <WebView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="70dp"
                 android:id="@+id/webView"
                 android:longClickable="false"
                 android:visibility="visible" />
