@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -15,6 +16,11 @@ public class DisplayResult extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_result);
+
+        WebView webview = (WebView) findViewById(R.id.webViewResult);
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
@@ -22,11 +28,14 @@ public class DisplayResult extends ActionBarActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (sharedText != null) {
-                String html_src = "<html><head><meta charset=\"utf-8\"></head><body>";
-                html_src += "-- " + sharedText + " --";
+                String html_src = "<html><head><meta charset=\"utf-8\">";
+                html_src += "<script type=\"text/javascript\" src=\"www/js/emulisp_core.js\"></script>";
+                html_src += "</head><body>";
+                html_src += "<div id=\"#display\"></div>";
+                html_src += "<div id=\"#error\"></div>";
+                html_src += "<script>document.write(EMULISP_CORE.eval('(+ 2 2)'));</script>";
                 html_src += "</body></html>";
-                WebView webview = (WebView) findViewById(R.id.webViewResult);
-                webview.loadData(html_src, "text/html", "utf-8");
+                webview.loadDataWithBaseURL("file:///android_asset/", html_src, "text/html", "utf-8", "");
             } else {
                 String message = getString(R.string.incompatible_data);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
