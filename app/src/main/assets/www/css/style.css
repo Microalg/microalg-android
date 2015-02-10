@@ -1,0 +1,136 @@
+body.microalg {
+    width: 95%;
+    margin: 0px auto;
+    font-family: Verdana, Arial, sans-serif;
+    color: black;
+    background-color: #D1D1D1;
+}
+.microalg a:link {color:#337;}
+.microalg a:visited {color:#333;}
+.microalg a:hover {color:#000;}
+.microalg a:active {color:#000;}
+.microalg h1 a,
+.microalg h2 a,
+.microalg h3 a,
+.microalg h4 a,
+.microalg h5 a,
+.microalg h6 a {
+    text-decoration: none;
+}
+.microalg.doc h2 {
+    border-top: 1px solid black;
+    padding-top: 0.5em;
+}
+.microalg code {
+    margin: 0 2px;
+    padding: 0px 5px;
+    border: 1px solid #AAA;
+    background-color: #DDD;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+.microalg pre code {
+    display: block;
+    white-space: pre;
+    position: relative;
+}
+.malg-container {
+    width: 95%;
+    margin: 0px auto;
+}
+.malg-blockly-iframe {
+    height: 350px;
+    width: 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #aaa;
+}
+.malg-editor, .malg-repl {
+    width: 100%;
+}
+.malg-ok {
+    margin: 2px;
+    background-color: #ddd;
+    width: 100%;
+}
+.malg-error {
+    color: red;
+}
+.malg-freq-error {
+    color: black;
+}
+.malg-display {
+    font-family: "Courier New",Courier,monospace;
+    margin-bottom: 2em;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+.malg-display p {
+    margin: 0px;
+    margin-left: 3px;
+}
+.microalg .terminal, .microalg .cmd {
+    width: 93%;
+    margin: 0px auto;
+    color: black;
+    background-color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+.link-right {
+    text-align: right;
+}
+.link-snippet {
+    text-align: right;
+}
+.link-snippet a {
+    text-decoration: none;
+}
+a.wp:after, a.offi:after, a.email:after {
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    vertical-align: super;
+    font-size: 50%;
+}
+a.wp:after {
+    content:"(wp)";
+}
+a.offi:after {
+    content:"(officiel)";
+}
+a.email:after {
+    content:"(email)";
+}
+#bla {
+    width: 60%;
+    margin: 0px auto;
+}
+#bla h1 {
+    text-align: center;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 1em;
+    padding: 1em;
+    z-index: 120;
+    background-color: #eee;
+}
+.microalg dt span {
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid black;
+    padding: 0.5em;
+    -webkit-border-top-left-radius: 1em;
+    -moz-border-top-left-radius: 1em;
+    border-top-left-radius: 1em;
+}
+.microalg dt span a {
+    color: black !important;
+    text-decoration: none;
+}
