@@ -22,6 +22,7 @@ public class DisplayResult extends ActionBarActivity {
         WebView webview = (WebView) findViewById(R.id.webViewResult);
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
 
         // https://developer.chrome.com/devtools/docs/remote-debugging#debugging-webviews
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -37,14 +38,7 @@ public class DisplayResult extends ActionBarActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (sharedText != null) {
-                String html_src = "<html><head><meta charset=\"utf-8\">";
-                html_src += "<script type=\"text/javascript\" src=\"www/js/emulisp_core.js\"></script>";
-                html_src += "</head><body>";
-                html_src += "<div id=\"#display\"></div>";
-                html_src += "<div id=\"#error\"></div>";
-                html_src += "<script>document.write(EMULISP_CORE.eval('(+ 2 2)'));</script>";
-                html_src += "</body></html>";
-                webview.loadDataWithBaseURL("file:///android_asset/", html_src, "text/html", "utf-8", "");
+                webview.loadUrl("file:///android_asset/www/display_result.html");
             } else {
                 String message = getString(R.string.incompatible_data);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
