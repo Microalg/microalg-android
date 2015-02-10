@@ -1,6 +1,8 @@
 package info.microalg.android;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +22,13 @@ public class DisplayResult extends ActionBarActivity {
         WebView webview = (WebView) findViewById(R.id.webViewResult);
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
+        // https://developer.chrome.com/devtools/docs/remote-debugging#debugging-webviews
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE)) {
+                WebView.setWebContentsDebuggingEnabled(true);
+            }
+        }
 
         Intent intent = getIntent();
         String action = intent.getAction();
