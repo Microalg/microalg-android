@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 
@@ -36,9 +37,14 @@ public class DisplayResult extends ActionBarActivity {
         String type = intent.getType();
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            final String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (sharedText != null) {
                 webview.loadUrl("file:///android_asset/www/display_result.html");
+                webview.setWebViewClient(new WebViewClient() {
+                    public void onPageFinished(WebView view, String url) {
+                        view.loadUrl("javascript:ide_action('" + sharedText + "')");
+                    }
+                });
             } else {
                 String message = getString(R.string.incompatible_data);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
