@@ -12,6 +12,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 public class DisplayResult extends ActionBarActivity {
 
@@ -49,6 +55,31 @@ public class DisplayResult extends ActionBarActivity {
                 String message = getString(R.string.incompatible_data);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
+        } else if (Intent.ACTION_VIEW.equals(action)) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                String path = intent.getData().getPath();
+                FileInputStream fis =  new FileInputStream(path);
+                BufferedReader br = new BufferedReader( new InputStreamReader(fis, "utf-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                }
+            } catch (FileNotFoundException e) {
+                String message = getString(R.string.file_not_found);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                String message = getString(R.string.problem_reading_file);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+            final String sharedText = sb.toString();
+            webview.loadUrl("file:///android_asset/www/display_result.html");
+            webview.setWebViewClient(new WebViewClient() {
+                public void onPageFinished(WebView view, String url) {
+                    view.loadUrl("javascript:ide_action('" + sharedText + "')");
+                }
+            });
         } else {
             String message = getString(R.string.incompatible_action);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
