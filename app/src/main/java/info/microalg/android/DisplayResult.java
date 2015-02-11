@@ -26,11 +26,6 @@ public class DisplayResult extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_result);
 
-        WebView webview = (WebView) findViewById(R.id.webViewResult);
-        WebSettings webSettings = webview.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
-
         // https://developer.chrome.com/devtools/docs/remote-debugging#debugging-webviews
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE)) {
@@ -43,14 +38,9 @@ public class DisplayResult extends ActionBarActivity {
         String type = intent.getType();
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            final String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (sharedText != null) {
-                webview.loadUrl("file:///android_asset/www/display_result.html");
-                webview.setWebViewClient(new WebViewClient() {
-                    public void onPageFinished(WebView view, String url) {
-                        view.loadUrl("javascript:ide_action('" + sharedText + "')");
-                    }
-                });
+                interpret(sharedText);
             } else {
                 String message = getString(R.string.incompatible_data);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -73,19 +63,32 @@ public class DisplayResult extends ActionBarActivity {
                 String message = getString(R.string.problem_reading_file);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
-            final String sharedText = sb.toString();
-            webview.loadUrl("file:///android_asset/www/display_result.html");
-            webview.setWebViewClient(new WebViewClient() {
-                public void onPageFinished(WebView view, String url) {
-                    view.loadUrl("javascript:ide_action('" + sharedText + "')");
-                }
-            });
+            interpret(sb.toString());
         } else {
             String message = getString(R.string.incompatible_action);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
     }
 
+    private void interpret(String src) {
+
+        // Some escapes in MicroAlg src:
+        final String final_src =
+                src.replace("\\", "\\\\")       // JS has to see the backslashes
+                   .replace("'", "\\'")         // src is '-delimited in the JS call
+                   .replaceAll("\n", "\\\\n");  // JS has to see the newlines
+        WebView webview = (WebView) findViewById(R.id.webViewResult);
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
+
+        webview.loadUrl("file:///android_asset/www/display_result.html");
+        webview.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                view.loadUrl("javascript:ide_action('" + final_src + "')");
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
