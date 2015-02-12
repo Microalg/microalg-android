@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -78,6 +79,7 @@ public class DisplayResult extends ActionBarActivity {
                    .replace("'", "\\'")         // src is '-delimited in the JS call
                    .replaceAll("\n", "\\\\n");  // JS has to see the newlines
         WebView webview = (WebView) findViewById(R.id.webViewResult);
+        webview.setWebChromeClient(new WebChromeClient());
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
