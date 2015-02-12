@@ -1,16 +1,22 @@
 package info.microalg.android;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.JsPromptResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -79,17 +85,49 @@ public class DisplayResult extends ActionBarActivity {
                    .replace("'", "\\'")         // src is '-delimited in the JS call
                    .replaceAll("\n", "\\\\n");  // JS has to see the newlines
         WebView webview = (WebView) findViewById(R.id.webViewResult);
-        webview.setWebChromeClient(new WebChromeClient());
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
-
-        webview.loadUrl("file:///android_asset/www/display_result.html");
+        webview.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsPrompt(WebView view, String url, String message,
+                                      String defaultValue, final JsPromptResult result) {
+                final EditText et = new EditText(view.getContext());
+                et.setSingleLine();
+                et.setText(defaultValue);
+                new AlertDialog.Builder(view.getContext())
+                    .setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setView(et)
+                    .setPositiveButton(android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    result.confirm(et.getText().toString());
+                                }
+                            })
+                    .setOnCancelListener(
+                            new DialogInterface.OnCancelListener() {
+                                public void onCancel(DialogInterface dialog) {
+                                    result.cancel();
+                                }
+                            })
+                    .show();
+                return true;
+            }
+        });
         webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                return true;
+            }
+            @Override
             public void onPageFinished(WebView view, String url) {
                 view.loadUrl("javascript:ide_action('" + final_src + "')");
             }
         });
+
+        webview.loadUrl("file:///android_asset/www/display_result.html");
     }
 
     @Override
