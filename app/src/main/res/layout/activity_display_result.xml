@@ -1,27 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".DisplayResult">
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/scrollView" >
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:nestedScrollingEnabled="false"
             android:weightSum="1">
 
             <WebView
-                android:layout_width="fill_parent"
-                android:layout_height="400dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/webViewResult"
                 android:longClickable="false"
                 android:visibility="visible" />
