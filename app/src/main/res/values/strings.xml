@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">MicroAlg</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
     <string name="main_instructions">Select the text below (with a long click or a double click), then share it to MicroAlg:</string>
     <string name="last_instructions">In the same manner you can share some code from a text editor or another app (like a web browser or a file explorer).</string>
     <string name="title_activity_display_result">MicroAlg</string>
@@ -10,5 +10,6 @@
     <string name="incompatible_data">Impossible to process this.</string>
     <string name="file_not_found">File not found.</string>
     <string name="problem_reading_file">Problem reading file.</string>
+    <string name="title_activity_about">About</string>
 
 </resources>
