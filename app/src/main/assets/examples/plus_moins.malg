@@ -1,0 +1,17 @@
+(Afficher "Devinez un nombre entre 1 et 30 compris.")
+(Initialiser cible (Entier@ 1 30))
+(Initialiser propo 0)
+(Afficher "Proposition ?")
+(Faire
+    (Affecter_a propo (Nombre (Demander)))
+    (Afficher propo)
+    (Si (> propo cible)
+     Alors (Afficher "Trop grand !")
+    )
+    (Si (< propo cible)
+     Alors (Afficher "Trop petit !")
+    )
+ Tant_que (=/ propo cible)
+)
+(Afficher "Bravo !")
+

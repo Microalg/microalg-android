@@ -4,7 +4,7 @@
     <string name="app_name">MicroAlg</string>
     <string name="action_about">About</string>
     <string name="main_instructions">Select the text below (with a long click or a double click), then share it to MicroAlg:</string>
-    <string name="last_instructions">In the same manner you can share some code from a text editor or another app (like a web browser or a file explorer).</string>
+    <string name="last_instructions">In the same manner you can share some code from a text editor or another app (like a web browser). You can also open .malg files from a file explorer (some sample files lie in your MicroAlg folder).</string>
     <string name="title_activity_display_result">MicroAlg</string>
     <string name="incompatible_action">Impossible to process this action.</string>
     <string name="incompatible_data">Impossible to process this.</string>

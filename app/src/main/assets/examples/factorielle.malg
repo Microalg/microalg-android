@@ -1,0 +1,12 @@
+(Definir (Facto n)
+    "Retourne la factorielle de l’entier `n`, version impérative."
+    "ProfGra"
+    (Initialiser i 1)
+    (Initialiser resultat 1)
+    (Tant_que (<= i n)
+     Faire (Affecter_a resultat (* resultat i))
+           (Affecter_a i (+ 1 i))
+    )
+    (Retourner resultat)
+)
+(Afficher (Facto 5))

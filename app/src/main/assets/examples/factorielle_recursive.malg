@@ -1,0 +1,9 @@
+(Definir (Facto n)
+    "Retourne la factorielle de l’entier `n`, version récursive."
+    "ProfGra"
+    (Si (<= n 1)
+     Alors (Retourner 1)
+     Sinon (Retourner (* n (Facto (- n 1))))
+    )
+)
+(Afficher (Facto 5))
