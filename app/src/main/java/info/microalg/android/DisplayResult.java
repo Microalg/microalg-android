@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.webkit.JsPromptResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -94,7 +95,7 @@ public class DisplayResult extends ActionBarActivity {
                 final EditText et = new EditText(view.getContext());
                 et.setSingleLine();
                 et.setText(defaultValue);
-                new AlertDialog.Builder(view.getContext())
+                AlertDialog dialog = new AlertDialog.Builder(view.getContext())
                     .setTitle(R.string.app_name)
                     .setMessage(message)
                     .setView(et)
@@ -110,7 +111,9 @@ public class DisplayResult extends ActionBarActivity {
                                     result.cancel();
                                 }
                             })
-                    .show();
+                    .create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                dialog.show();
                 return true;
             }
         });
