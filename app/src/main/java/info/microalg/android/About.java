@@ -28,11 +28,23 @@ public class About extends ActionBarActivity {
 
         WebView webview = (WebView) findViewById(R.id.webViewAbout);
         WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        String version = "";
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            Log.e("version info", "PackageManager.NameNotFoundException");
+        }
+        final String final_version = version;
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 return true;
+            }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                view.loadUrl("javascript:populate_version('" + final_version + "')");
             }
         });
         webview.loadUrl("file:///android_asset/www/about.html");

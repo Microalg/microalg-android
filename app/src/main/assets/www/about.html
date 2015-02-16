@@ -9,6 +9,7 @@
             <img src="img/logo_microalg.svg" width="100%"/>
         </div>
         <h1>MicroAlg</h1>
+        <h2 id="version"></h2>
         <p>Cette application vous permet <strong>d’exécuter du code MicroAlg</strong> sur votre
         machine.</p>
         <p style="text-align: right;"><a href="https://github.com/Microalg/microalg-android">Dépôt GitHub</a>
@@ -25,5 +26,10 @@
         <a href="http://fr.wikipedia.org/wiki/Programmation_imp%C3%A9rative" class="wp">programmation impérative</a>.</p>
         <p>Pour plus d’informations, voir <a href="http://microalg.info">le site officiel</a>
         de MicroAlg.</p>
+        <script>
+            function populate_version(version) {
+                document.getElementById("version").innerHTML = version;
+            }
+        </script>
     </body>
 </html>
