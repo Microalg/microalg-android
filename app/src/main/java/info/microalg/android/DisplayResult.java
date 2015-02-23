@@ -57,7 +57,7 @@ public class DisplayResult extends ActionBarActivity {
             try {
                 String path = intent.getData().getPath();
                 FileInputStream fis =  new FileInputStream(path);
-                BufferedReader br = new BufferedReader( new InputStreamReader(fis, "utf-8"));
+                BufferedReader br = new BufferedReader(new InputStreamReader(fis, "utf-8"));
                 String line;
                 while ((line = br.readLine()) != null) {
                     sb.append(line);
