@@ -9,4 +9,5 @@
     )
     (Retourner resultat)
 )
-(Afficher (Facto 5))
+(Afficher "Vous voulez la factorielle de quel entier ?")
+(Afficher (Facto (Nombre (Demander))))
