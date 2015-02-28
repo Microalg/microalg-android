@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "info.microalg.android"
-        minSdkVersion 17
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
         versionName "0.1.0"
