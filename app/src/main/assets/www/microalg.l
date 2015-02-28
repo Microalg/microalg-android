@@ -1,4 +1,4 @@
-(setq version "0.2.5")
+(setq version "0.2.6")
 (put 'version 'text (pack "MicroAlg version " version))
 (setq apropos
 "L’idée de MicroAlg est née lors d’une formation ISN, de la frustration due à
@@ -123,8 +123,8 @@ Voir <http://microalg.info>.")
                        x))
 
 # Vérif qu’une variable est bien initialisée :
-(de !inited (!sym)
-    (or (eval !sym) (get !sym 'type)) )
+(de !inited (!sym !evaled_sym)
+    (or !evaled_sym (get !sym 'type)) )
 
 # Doc pour les fonctions PicoLisp
 (put '+ 'doc
@@ -261,7 +261,7 @@ Si vous ne l’avez pas déjà fait, commencez par le
    a_afficher (!text first)
   )
   # Quelques vérifications
-  (ifn (!inited first) (quit "`Afficher` : la variable n’est pas initialisée." first))
+  (ifn (!inited first a_afficher) (quit "`Afficher` : la variable n’est pas initialisée." first))
   (if second (quit (pack "`Afficher` n’a qu’un paramètre, faites plusieurs "
                          "affichages ou utilisez `Concatener`." )))
   # Le boulot
@@ -503,7 +503,7 @@ Le suffixe `@` indique le caractère pseudo-aléatoire de cette commande.")
     -> Rien
 ")
 (put 'Demander 'text "Commande `Demander`.")
-(de Demander () (in NIL (read " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")))
+(de Demander () (in NIL (line " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")))
 # Références:
 # https://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#Table_des_128_caract.C3.A8res_ASCII
 # https://en.wikipedia.org/wiki/ASCII#ASCII_printable_character_code_chart
@@ -584,7 +584,7 @@ Le suffixe `@` indique le caractère pseudo-aléatoire de cette commande.")
     # Quelques vérifications
     (if !deuze (quit "`Longueur` n’a qu’un paramètre."))
     (ifn !obj 0  # pour gérer texte vide
-      (ifn (!inited !obj) (quit "`Longueur` : la variable n’est pas initialisée." !obj))
+      (ifn (!inited !obj !evaled_obj) (quit "`Longueur` : la variable n’est pas initialisée." !obj))
     )
     (setq !npdl " n’a pas de `Longueur`.")
     (cond
@@ -616,7 +616,7 @@ La numérotation commence à 1.
         !troize (caddr arg_lst))
     # Quelques vérifications
     (if !troize (quit "`Nieme` n’a que deux paramètres."))
-    (ifn (!inited !obj) (quit "`Nieme` : la variable n’est pas initialisée." !obj))
+    (ifn (!inited !obj !evaled_obj) (quit "`Nieme` : la variable n’est pas initialisée." !obj))
     (setq !onppeuv "`Nieme` ne peut pas extraire une valeur ")
     (cond
         ((num? !evaled_obj) (quit (pack !onppeuv "d’un nombre.") !evaled_obj))
@@ -719,7 +719,7 @@ Avec une liste :
         !troize (caddr arg_lst))
        # Quelques vérifications
        (if !troize (quit "`Ajouter_a` n’a que deux paramètres."))
-       (ifn (!inited !sym) (quit "`Ajouter_a` : la variable n’est pas initialisée." !sym))
+       (ifn (!inited !sym !evaled_sym) (quit "`Ajouter_a` : la variable n’est pas initialisée." !sym))
        (if (!boolM2P (!texte? !sym))
            (if (or (not (!boolM2P (Texte? !elt)))
                    (!boolM2P (> (Longueur !elt) 1)) )
@@ -763,7 +763,7 @@ Avec une liste :
         !deuze (cadr arg_lst))
        # Quelques vérifications
        (if !deuze (quit "`Retirer_de` n’a qu’un paramètre."))
-       (ifn (!inited !sym) (quit "`Retirer_de` : la variable n’est pas initialisée." !sym))
+       (ifn (!inited !sym !evaled_sym) (quit "`Retirer_de` : la variable n’est pas initialisée." !sym))
        # Le calcul
        (cond
          ((!boolM2P (Liste? !evaled_sym)) (pop> !evaled_sym))
@@ -796,18 +796,21 @@ en minuscule).
 (de Type arg_lst
   (let (!x (car arg_lst)
         !evaled_x (eval !x))
-       (cond
-         ((not !x) "texte")  # Possiblement "" en direct.
-         ((!boolM2P (Nombre?  !evaled_x)) "nombre")
-         ((!boolM2P (Liste?   !x))        "liste")
-         ((!boolM2P (!texte?  !x))        "texte")  # pour les sym textuels ?
-         ((!boolM2P (Texte?   !evaled_x)) "texte")
-         ((!boolM2P (Liste?   !evaled_x)) "liste")
-         ((!boolM2P (Booleen? !evaled_x)) "booleen")
-         ((!boolM2P (== Rien  !evaled_x)) "rien")
-         ((sym? x) (get !x 'type))
-         (T Rien)
-       ) ) )
+        embedded_type (ifn (num? !x) (get !x 'type))
+       (if embedded_type
+           embedded_type
+           (cond
+             ((not !x) "texte")  # Possiblement "" en direct.
+             ((!boolM2P (Nombre?  !evaled_x)) "nombre")
+             ((!boolM2P (Liste?   !x))        "liste")
+             ((!boolM2P (!texte?  !x))        "texte")  # pour les sym textuels ?
+             ((!boolM2P (Texte?   !evaled_x)) "texte")
+             ((!boolM2P (Liste?   !evaled_x)) "liste")
+             ((!boolM2P (Booleen? !evaled_x)) "booleen")
+             ((!boolM2P (== Rien  !evaled_x)) "rien")
+             ((sym? x) (get !x 'type))
+             (T Rien)
+           ) ) ) )
 (put 'Texte 'doc
 "Commande qui retourne le texte correspondant à son paramètre.
 
@@ -996,6 +999,20 @@ Voir <http://fr.wikipedia.org/wiki/Fonction_OU>.")
 )
 
 # Procédures utilisateur
+# Tout d’abord les générateurs d’initialisation
+(de !liste_inits_type (!syms)
+    (mapcar '((!sym) (list 'put (cons 'quote !sym) ''type (list 'Type !sym))) !syms)
+)
+(de !liste_inits_val (!syms)
+    (mapcar '((!sym) (list 'Initialiser !sym !sym)) !syms)
+)
+(de !liste_resets_type (!syms)
+    (mapcar '((!sym) (list 'put (cons 'quote !sym) ''type NIL)) !syms)
+)
+(de !liste_resets_val (!syms)
+    (mapcar '((!sym) (list 'setq !sym NIL)) !syms)
+)
+# Ensuite le boulot :
 (put 'Definir 'doc
 "Permet de définir une nouvelle commande (fonction mathématique ou procédure).
 
@@ -1040,6 +1057,14 @@ Exemple 2 :
         nom       (car signature)
         params    (cdr signature)
         corps     (cdr arg_lst)
+        aug_corps (conc
+                    (!liste_inits_type params)
+                    (!liste_inits_val params)
+                    (list (list 'let (list '!result (list 'run (cons 'quote corps)))
+                      (list 'run (cons 'quote (!liste_resets_type params)))
+                      (list 'run (cons 'quote (!liste_resets_val params)))
+                      '!result))
+                  )
         doc       (car corps)
         auteur    (cadr corps))
        (ifn (str? doc)
@@ -1051,7 +1076,7 @@ Exemple 2 :
                             "`, définie par *"
                             auteur
                             "*."))
-       (set nom (list params (list 'run (cons 'quote corps))))
+       (set nom (list params (list 'run (cons 'quote aug_corps))))
        Rien  # Pas de valeur de retour
   )
 )
@@ -1351,8 +1376,8 @@ Exemples :
     # Quelques vérifications
     (ifn arg_lst (quit "`Vide?` prend un paramètre."))
     (if !deuze (quit "`Vide?` n’a qu’un paramètre."))
-    (ifn !obj Vrai
-      (ifn (!inited !obj) (quit "`Vide?` : la variable n’est pas initialisée." !obj))
+    (ifn !obj Vrai  # Pour le texte vide "".
+      (ifn (!inited !obj !evaled_obj) (quit "`Vide?` : la variable n’est pas initialisée." !obj))
     )
     (setq !ctnaass "`Vide?` : ce test n’a aucun sens sur ")
     (cond
